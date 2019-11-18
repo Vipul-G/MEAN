@@ -6,7 +6,7 @@ const postsRoutes = require('./routes/posts');
 const app = express();
 const bodyParser = require('body-parser');
 
-mongoose.connect("mongodb+srv://Hny:9q15EcHDxKgTquGH@cluster0-bvc4k.mongodb.net/node-angular?retryWrites=true", {
+mongoose.connect(require('./uri'), {
   useNewUrlParser: true,
   useUnifiedTopology: true
  })
