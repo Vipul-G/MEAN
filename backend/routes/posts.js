@@ -11,10 +11,24 @@ const MIME_TYPE_MAP = {
 };
 
 router.get('/', (req, res, next) => {
-  Post.find().then((document)=>{
+  const pageSize = +req.query.pageSize; // + will convert string to number
+  const curentPage = +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts;
+  if (pageSize && curentPage) {
+    postQuery
+      .skip(pageSize * (curentPage - 1))
+      .limit(pageSize);
+  }
+  postQuery.then((document)=>{
+    fetchedPosts = document;
+    return Post.count();
+  })
+  .then(count => {
     res.status(200).json({
       message: 'Post fetched successfully',
-      posts: document
+      posts: fetchedPosts,
+      maxPosts: count
     });
   });
 });
@@ -67,7 +81,6 @@ router.post('', multer({storage}).single('image'), (req, res, next) => {
 router.put('/:id', multer({storage}).single('image'), (req, res, next) => {
   let imagePath = req.body.imagePath; // imagePath is string
   if (req.file) {
-    console.log('req.file is true');
     const url = req.protocol + '://' + req.get('host');
     imagePath = url + "/images/" + req.file.filename;
   }
@@ -77,7 +90,6 @@ router.put('/:id', multer({storage}).single('image'), (req, res, next) => {
     content: req.body.content,
     imagePath: imagePath
   });
-  console.log(post);
   Post.updateOne({_id: req.params.id}, post).then(updatedPost => {
     res.status(200).json({ message: 'Updated Successfully!' });
   })
@@ -85,7 +97,6 @@ router.put('/:id', multer({storage}).single('image'), (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then((result) => {
-    console.log(result);
     res.status(200).json({ message: 'post deleted successfully!' });
   })
   .catch((reason) => {

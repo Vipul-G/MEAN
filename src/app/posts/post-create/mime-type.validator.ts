@@ -5,10 +5,8 @@ export const mimeType = (
   control: AbstractControl
 ): Promise<{ [key: string]: any }> | Observable<{ [key: string]: any }> => {
   if (typeof(control.value) === 'string') {
-    console.log('if statement ran');
     return of(null);
   }
-  console.error('if statement of mime type does not ran');
   const file = control.value as File;
   const fileReader = new FileReader();
   const frObs = Observable.create(
