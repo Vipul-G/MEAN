@@ -7,7 +7,7 @@ const userRoutes = require('./routes/user');
 const app = express();
 const bodyParser = require('body-parser');
 
-mongoose.connect(require('./uri'), {
+mongoose.connect(require('./uri').uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
  })
