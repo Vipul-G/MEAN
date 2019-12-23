@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
   }
   postQuery.then((document)=>{
     fetchedPosts = document;
-    return Post.count();
+    return Post.countDocuments();
   })
   .then(count => {
     res.status(200).json({
