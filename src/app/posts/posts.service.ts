@@ -42,7 +42,12 @@ export class PostsService {
 
   getPost(id: string) {
     return this.http
-    .get<{_id: string, title: string, content: string, imagePath: string}>('http://localhost:3000/api/posts/' + id);
+    .get<{_id: string,
+      title: string,
+      content: string,
+      imagePath: string,
+      creator: string
+    }>('http://localhost:3000/api/posts/' + id);
   }
 
   deletePost(postId: string) {
@@ -78,7 +83,7 @@ export class PostsService {
       postData.append('image', image, title);
     } else {
       console.log('image type was string');
-      postData = { id, title, content, imagePath: image };
+      postData = { id, title, content, imagePath: image, creator: null };
     }
 
     this.http.put<{ message: string }>(`http://localhost:3000/api/posts/${id}`,

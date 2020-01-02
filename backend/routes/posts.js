@@ -89,7 +89,8 @@ router.put('/:id',checkJWT, multer({storage}).single('image'), (req, res, next) 
     _id: req.body.id,
     title: req.body.title,
     content: req.body.content,
-    imagePath: imagePath
+    imagePath: imagePath,
+    creator: req.userData.userId
   });
   Post.updateOne({_id: req.params.id, creator: req.userData.userId }, post).then(updatedPost => {
     if (updatedPost.nModified > 0) {
