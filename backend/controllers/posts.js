@@ -38,7 +38,7 @@ exports.updatePost = function (req, res, next) {
     creator: req.userData.userId
   });
   Post.updateOne({_id: req.params.id, creator: req.userData.userId }, post).then(updatedPost => {
-    if (updatedPost.nModified > 0) {
+    if (updatedPost.n > 0) {
       res.status(200).json({ message: 'Updated Successfully!' });
     } else {
       res.status(401).json({ message: 'Not Authorization' });
