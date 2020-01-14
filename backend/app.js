@@ -7,15 +7,18 @@ const userRoutes = require('./routes/user');
 const app = express();
 const bodyParser = require('body-parser');
 
-mongoose.connect(require('./uri').uri, {
+mongoose.connect( "mongodb+srv://Hny:"
+  + process.env.MONGO_ATLAS_PW +
+  "@cluster0-bvc4k.mongodb.net/node-angular?retryWrites=true" , {
   useNewUrlParser: true,
   useUnifiedTopology: true
  })
 .then(()=>{
   console.log('Connected to database');
 })
-.catch(()=>{
-  console.error('Connection failed');
+.catch((reason)=>{
+  console.error('Connection failed', '\n');
+  console.log(reason);
 });
 
 app.use(bodyParser.json());

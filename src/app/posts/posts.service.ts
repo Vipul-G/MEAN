@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Post } from './post.model';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+
+const BackEndURL = environment.apiURL + '/posts';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +19,7 @@ export class PostsService {
 
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
-    this.http.get<{message: string, posts: Post[], maxPosts: number}>('http://localhost:3000/api/posts' + queryParams)
+    this.http.get<{message: string, posts: Post[], maxPosts: number}>( BackEndURL + '/' + queryParams)
       .pipe(map((postData) => {
         return {
           posts: postData.posts.map((post: any) => {
@@ -47,11 +50,11 @@ export class PostsService {
       content: string,
       imagePath: string,
       creator: string
-    }>('http://localhost:3000/api/posts/' + id);
+    }>(BackEndURL + id);
   }
 
   deletePost(postId: string) {
-    return this.http.delete('http://localhost:3000/api/posts/' + postId);
+    return this.http.delete(BackEndURL + '/' + postId);
   }
 
   getPostUpdateListener() {
@@ -63,7 +66,7 @@ export class PostsService {
     postData.append('title', title);
     postData.append('content', content);
     postData.append('image', image, title);
-    this.http.post<{message: string, post: Post}>('http://localhost:3000/api/posts',
+    this.http.post<{message: string, post: Post}>(BackEndURL,
       postData)
       .subscribe((responseData) => {
         this.router.navigate(['/']);
@@ -86,7 +89,7 @@ export class PostsService {
       postData = { id, title, content, imagePath: image, creator: null };
     }
 
-    this.http.put<{ message: string }>(`http://localhost:3000/api/posts/${id}`,
+    this.http.put<{ message: string }>(`${BackEndURL}/${id}`,
     postData).subscribe((responseData) => {
       /**
        * this.post will remain empty until we do not visit post-list component
